@@ -1,0 +1,38 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "user_directory": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid && !data.exists() && newData.hasChildren(['uid','username','escrownId'])"
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || auth.token.admin === true)",
+        ".write": "auth != null && auth.uid === $uid && !data.exists()",
+        "username": { ".write": "auth != null && auth.uid === $uid && newData.isString() && newData.val().matches(/^[A-Za-z0-9_]{3,20}$/)" },
+        "accountNumber": { ".write": "auth != null && auth.uid === $uid && newData.isString() && newData.val().matches(/^\\d{10}$/)" }
+      }
+    },
+    "chats": {
+      "$chatId": {
+        ".read": "auth != null && data.child('members').child(auth.uid).val() === true",
+        ".write": false,
+        "messages": {
+          "$messageId": {
+            ".read": "auth != null && root.child('chats').child($chatId).child('members').child(auth.uid).val() === true",
+            ".write": "auth != null && root.child('chats').child($chatId).child('members').child(auth.uid).val() === true && !data.exists() && newData.hasChildren(['timestamp']) && (newData.child('isSystem').val() !== true && newData.child('senderId').val() === auth.uid)",
+            ".validate": "newData.child('timestamp').isNumber() && (newData.child('isSystem').val() !== true && newData.child('senderId').val() === auth.uid && newData.child('text').isString() && newData.child('text').val().length <= 4000)"
+          }
+        },
+        "transaction": { ".read": "auth != null && data.parent().child('members').child(auth.uid).val() === true", ".write": false },
+        "new_tx_request": { ".read": "auth != null && data.parent().child('members').child(auth.uid).val() === true", ".write": false }
+      }
+    },
+    "flagged_transactions": { ".read": "auth != null && auth.token.admin === true", ".write": false },
+    "completed_ledger": { ".read": "auth != null && auth.token.admin === true", ".write": "auth != null && auth.token.admin === true" },
+    "publicTransactionIds": { ".read": false, ".write": false }
+  }
+}

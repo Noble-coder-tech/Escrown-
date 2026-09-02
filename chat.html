@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escrown - Secure Chat</title>
+  <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+  <div class="chat-container">
+    <header class="chat-header">
+      <div class="user-info">
+        <h2 id="peer-username">Loading...</h2>
+        <span id="peer-escrown-id" class="gold-text">----</span>
+      </div>
+      <div class="header-actions">
+        <button id="btn-flag-tx" class="btn-danger-outline">🚩 Flag Transaction</button>
+        <button id="btn-new-tx" class="btn-gold-outline">🔄 New Transaction</button>
+      </div>
+    </header>
+
+    <!-- Active Transaction Header Banner -->
+    <div id="tx-status-banner" class="status-banner">
+      <span>Active Tx ID: <strong id="active-tx-id" class="gold-text">None</strong></span>
+      <span id="tx-status-badge" class="badge">No Active Escrow</span>
+    </div>
+
+    <!-- Confirmation Modal / Prompt Box for New Transaction Requests -->
+    <div id="new-tx-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3>New Transaction Request</h3>
+        <p id="new-tx-modal-text">The other party wants to start a new transaction. Accepting will lock and complete the previous transaction ID (preventing future flags).</p>
+        <div class="modal-buttons">
+          <button id="btn-accept-new-tx" class="btn-gold">Accept & Start New</button>
+          <button id="btn-decline-new-tx" class="btn-outline">Decline</button>
+        </div>
+      </div>
+    </div>
+
+    <main id="chat-messages" class="messages-box">
+      <!-- Dynamic Chat Messages & Gemini Notifications Render Here -->
+    </main>
+
+    <footer class="chat-footer">
+      <form id="chat-form">
+        <input type="text" id="message-input" placeholder="Type a message or use /agreed AMOUNT, /newtransaction, /flagtransaction..." required>
+        <button type="submit" class="btn-gold">Send</button>
+      </form>
+    </footer>
+  </div>
+
+  <script type="module" src="chat.js"></script>
+
+</body>
+</html>

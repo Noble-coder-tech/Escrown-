@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escrown | Verification</title>
+    <link rel="stylesheet" href="verification.css">
+    <link rel="icon" type="image" href="logo.png">
+</head>
+<body>
+    
+    <div class="inner-div">
+     <div class="textbox"><h3><span class="txt-hder">Account Verification Required</span>
+        <br>
+ <span class="texry">A verification link has been sent to your<span id="email-123">email address.</span> Please click the link to confirm your identity and activate your Escrown account.</span></h3></div>
+     <button type="button" id="resend" class="btn-rsnd">Resend?</button>
+
+
+
+     <button id="backToSignInBtn" class="btn">Back to sign in</button>
+    </div>
+    
+    
+    <script>
+        function backToSignin() {
+            window.location.href = "signin.html"
+        }
+    </script>
+    <script type="module" src="auth.js"></script>
+</body>
+</html>

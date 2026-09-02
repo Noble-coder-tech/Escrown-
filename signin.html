@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Escrown</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Log in to your account</p>
+
+            <form id="signin-form">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="signin-email" placeholder="email@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="signin-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary" id="btn-sign-in">Sign In</button>
+            </form>
+
+            <div class="divider"><span>or</span></div>
+
+            <button class="btn-google" id="google-signin">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Sign in with Google
+            </button>
+
+            <p class="footer-text">
+                Don't have an account? <a href="signup.html">Sign Up</a>
+            </p>
+            <p class="footer-text">
+                <a href="forget.html"> Forgot Password?</a>
+            </p>
+        </div>
+    </div>
+    <script type="module" src="auth.js"></script>
+    
+</body>
+</html>

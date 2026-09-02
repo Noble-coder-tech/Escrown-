@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escrown - Governance & Ledger Panel</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-container">
+    <header class="top-nav">
+      <div class="brand">
+        <span class="gold-text">ESCROWN</span> ADMIN PANEL
+      </div>
+      <div class="nav-right">
+        <span id="admin-id-display" class="gold-text">AUTHENTICATED</span>
+        <button id="admin-logout-btn" class="btn-outline">Logout</button>
+      </div>
+    </header>
+
+    <main class="dashboard-content">
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <h3>Total Users</h3>
+          <p id="metric-users">--</p>
+        </div>
+        <div class="metric-card">
+          <h3>Flagged Reports</h3>
+          <p id="metric-flagged" class="red-text">--</p>
+        </div>
+        <div class="metric-card">
+          <h3>Completed Logged Tx</h3>
+          <p id="metric-completed" class="gold-text">--</p>
+        </div>
+      </section>
+
+      <!-- 1. FLAGGED TRANSACTIONS BOX -->
+      <section class="data-section border-red">
+        <h2>🚩 Flagged Transactions (Direct Email Dispute Box)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Flagged Tx ID</th>
+                <th>Reporter UID</th>
+                <th>Status</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="flagged-table-body">
+              <tr><td colspan="5" class="center-text">Loading flagged transactions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 2. COMPLETED TRANSACTIONS LEDGER (NOTES APP STYLE) -->
+      <section class="data-section">
+        <h2>✅ Release Funded Transaction</h2>
+        <p class="subtitle-text">A transaction must first be marked FUNDED by authorized payment verification. Releasing it completes the transaction and creates the immutable completion record.</p>
+        
+        <form id="add-ledger-form" class="ledger-form">
+          <input type="text" id="ledger-tx-input" placeholder="Enter public Tx ID (e.g. TXAB12CD34)" required>
+          <input type="text" id="ledger-note-input" placeholder="Optional payout reference">
+          <button type="submit" class="btn-gold">Release Transaction</button>
+        </form>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Completed Tx ID</th>
+                <th>Logged Notes</th>
+                <th>Date Completed</th>
+                <th>Remove Entry</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-table-body">
+              <tr><td colspan="4" class="center-text">No completed transactions logged yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3. REGISTERED USERS -->
+      <section class="data-section">
+        <h2>Registered Platform Users</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Escrown ID</th>
+                <th>Email</th>
+                <th>Account Number</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <tr><td colspan="4" class="center-text">Loading users...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

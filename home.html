@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escrown - Dashboard</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body class="dashboard-body">
+  <header class="top-nav">
+    <div class="nav-brand">
+      <img src="logo.png" alt="Escrown Logo" class="nav-logo">
+      <span>ESCROWN</span>
+    </div>
+    <div class="nav-user">
+      <span id="user-display-id">ID: Loading...</span>
+      <a href="profile.html" class="nav-link">Profile</a>
+      <button id="logout-btn" class="btn-outline">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    <section class="action-card">
+      <h2>Start a Secure Transaction</h2>
+      <p>Enter the Username or 6-character Escrown ID of the person you want to chat with.</p>
+      <form id="start-chat-form">
+        <div class="form-group">
+          <input type="text" id="target-user-id" placeholder="Enter Username or Escrown ID" required>
+        </div>
+        <button type="submit" class="btn-gold">Open Escrow Chat</button>
+      </form>
+      <p id="chat-error" class="error-msg"></p>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

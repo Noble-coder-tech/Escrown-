@@ -1,0 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Escrown - Secure Escrow</title><link rel="stylesheet" href="index.css"><link rel="icon" href="logo.png"></head>
+<body><div class="loading-container"><img src="logo.png" alt="Escrown Logo" class="logo-spinner"><h1 class="brand-title">ESCROWN</h1><div class="progress-bar"><div class="progress-fill"></div></div><p id="status-text">Checking your session…</p></div>
+<script type="module">import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; import { auth } from "./firebase-config.js"; const s=document.getElementById("status-text"); onAuthStateChanged(auth,u=>{ if(u && (u.emailVerified || u.providerData.some(p=>p.providerId==="google.com"))){s.textContent="Redirecting to Dashboard…";location.replace("home.html");} else if(u){s.textContent="Email verification required…";location.replace("verification.html");} else {location.replace("signin.html");} });</script></body></html>

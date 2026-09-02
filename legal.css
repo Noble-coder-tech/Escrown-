@@ -1,0 +1,134 @@
+:root {
+  --black: #000000;
+  --dark-bg: #0d0d0d;
+  --card-bg: #141414;
+  --gold: #d4af37;
+  --white: #ffffff;
+  --gray: #888888;
+  --border: #222222;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: var(--black);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.legal-container {
+  width: 100%;
+  max-width: 900px;
+  min-height: 100vh;
+  background-color: var(--dark-bg);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.legal-header {
+  background-color: var(--card-bg);
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.gold-text {
+  color: var(--gold);
+}
+
+.back-link {
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.back-link:hover {
+  opacity: 0.8;
+}
+
+.legal-content {
+  flex: 1;
+  padding: 40px 30px;
+  line-height: 1.6;
+}
+
+.legal-content h1 {
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.effective-date {
+  font-size: 0.85rem;
+  color: var(--gray);
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 15px;
+}
+
+.legal-content section {
+  margin-bottom: 30px;
+}
+
+.legal-content h2 {
+  font-size: 1.2rem;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.legal-content p {
+  font-size: 0.95rem;
+  color: #cccccc;
+  margin-bottom: 12px;
+}
+
+.legal-content ul {
+  list-style-type: square;
+  padding-left: 20px;
+  color: #cccccc;
+  font-size: 0.95rem;
+}
+
+.legal-content li {
+  margin-bottom: 8px;
+}
+
+.legal-content strong {
+  color: var(--gold);
+}
+
+code {
+  background-color: #1a1a1a;
+  color: var(--gold);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.legal-footer {
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border);
+  padding: 20px 30px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--gray);
+}

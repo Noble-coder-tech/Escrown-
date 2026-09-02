@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escrown - Profile</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body class="dashboard-body">
+  <header class="top-nav">
+    <div class="nav-brand">
+      <img src="logo.png" alt="Escrown Logo" class="nav-logo">
+      <span>ESCROWN</span>
+    </div>
+    <div class="nav-user">
+      <a href="home.html" class="nav-link">Dashboard</a>
+      <button id="logout-btn" class="btn-outline">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    <section class="action-card">
+      <h2>Your Profile</h2>
+      <div class="profile-details">
+        <p><strong>Username:</strong> <span id="profile-username">--</span></p>
+        <p><strong>Escrown ID:</strong> <span id="profile-escrown-id" class="gold-text">--</span></p>
+        <p><strong>Email:</strong> <span id="profile-email">--</span></p>
+      </div>
+
+      <h3 style="margin-top: 25px;">Update Bank Details</h3>
+      <form id="update-bank-form">
+        <div class="form-group">
+          <label for="profile-account-number">Bank Account Number</label>
+          <input type="text" id="profile-account-number" maxlength="10" required>
+        </div>
+        <button type="submit" class="btn-gold">Save Changes</button>
+      </form>
+      <p id="profile-msg" class="notice-msg" style="display:none; margin-top:10px;"></p>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
