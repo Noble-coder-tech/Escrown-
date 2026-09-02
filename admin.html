@@ -60,11 +60,17 @@
         <h2>✅ Release Funded Transaction</h2>
         <p class="subtitle-text">A transaction must first be marked FUNDED by authorized payment verification. Releasing it completes the transaction and creates the immutable completion record.</p>
         
-        <form id="add-ledger-form" class="ledger-form">
-          <input type="text" id="ledger-tx-input" placeholder="Enter public Tx ID (e.g. TXAB12CD34)" required>
-          <input type="text" id="ledger-note-input" placeholder="Optional payout reference">
-          <button type="submit" class="btn-gold">Release Transaction</button>
+        <form id="verify-payment-form" class="ledger-form">
+          <input type="text" id="payment-tx-input" placeholder="Public Tx ID (e.g. TXAB12CD34)" required>
+          <input type="text" id="payment-reference-input" placeholder="Payment/provider reference" required>
+          <button type="submit" class="btn-gold">Verify Payment</button>
         </form>
+        <form id="add-ledger-form" class="ledger-form">
+          <input type="text" id="ledger-tx-input" placeholder="Public Tx ID (e.g. TXAB12CD34)" required>
+          <input type="text" id="ledger-note-input" placeholder="Payout reference">
+          <button type="submit" class="btn-gold">Release Funded Transaction</button>
+        </form>
+        <p id="admin-action-msg" class="subtitle-text" role="status"></p>
 
         <div class="table-wrapper">
           <table>
@@ -73,11 +79,10 @@
                 <th>Completed Tx ID</th>
                 <th>Logged Notes</th>
                 <th>Date Completed</th>
-                <th>Remove Entry</th>
               </tr>
             </thead>
             <tbody id="ledger-table-body">
-              <tr><td colspan="4" class="center-text">No completed transactions logged yet.</td></tr>
+              <tr><td colspan="3" class="center-text">No completed transactions logged yet.</td></tr>
             </tbody>
           </table>
         </div>

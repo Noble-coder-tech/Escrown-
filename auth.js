@@ -4,8 +4,9 @@ import {
   signInWithPopup, GoogleAuthProvider, sendEmailVerification,
   sendPasswordResetEmail, signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { ref, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-import { auth, db } from "./firebase-config.js";
+import { httpsCallable, getFunctions } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
+import { auth, app } from "./firebase-config.js";
+const functions = getFunctions(app, "europe-west1");
 
 const provider = new GoogleAuthProvider();
 const PASSWORD_MIN = 8;
@@ -23,27 +24,8 @@ function go(path) { if (page() !== path) location.href = path; }
 function isGoogleUser(user) { return user?.providerData?.some(p => p.providerId === "google.com"); }
 
 async function ensureProfile(user, requestedUsername = "") {
-  const userRef = ref(db, `users/${user.uid}`);
-  const snap = await get(userRef);
-  if (snap.exists()) {
-    const current = snap.val() || {};
-    if (!current.escrownId && current.escrownID) { current.escrownId = current.escrownID; await set(userRef, current); }
-    if (!current.username) { current.username = (user.displayName || user.email?.split("@")[0] || "User").replace(/[^a-zA-Z0-9_]/g, "").slice(0, 20) || `user${user.uid.slice(0, 6)}`; await set(ref(db, `users/${user.uid}/username`), current.username); }
-    await set(ref(db, `user_directory/${user.uid}`), { uid: user.uid, username: current.username, escrownId: current.escrownId });
-    return current;
-  }
-
-  const profile = {
-    uid: user.uid,
-    email: user.email || "",
-    username: requestedUsername || (user.displayName || user.email?.split("@")[0] || "User").replace(/[^a-zA-Z0-9_]/g, "").slice(0, 20) || `user${user.uid.slice(0, 6)}`,
-    escrownId: generateEscrownID(),
-    displayName: user.displayName || "",
-    createdAt: Date.now()
-  };
-  await set(userRef, profile);
-  await set(ref(db, `user_directory/${user.uid}`), { uid: user.uid, username: profile.username, escrownId: profile.escrownId });
-  return profile;
+  const result = await httpsCallable(functions, "ensureUserProfile")({ username: requestedUsername });
+  return result.data;
 }
 
 async function handleSignup(e) {
@@ -147,6 +129,19 @@ if (signinForm) signinForm.addEventListener("submit", handleSignin);
 if (forgotForm) forgotForm.addEventListener("submit", handleForgot);
 for (const id of ["google-signup", "google-signin"]) document.getElementById(id)?.addEventListener("click", handleGoogle);
 document.getElementById("resend")?.addEventListener("click", handleResend);
+document.getElementById("backToSignInBtn")?.addEventListener("click", async () => {
+  await signOut(auth);
+  sessionStorage.removeItem("pendingEmail");
+  go("signin.html");
+});
+document.getElementById("refresh-verification")?.addEventListener("click", async () => {
+  try {
+    if (!auth.currentUser) return go("signin.html");
+    await auth.currentUser.reload();
+    if (auth.currentUser.emailVerified || isGoogleUser(auth.currentUser)) go("home.html");
+    else alert("Your email is not verified yet. Open the verification email, then try again.");
+  } catch (err) { alert(cleanAuthError(err)); }
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   const checkbox = document.getElementById("tickbox");

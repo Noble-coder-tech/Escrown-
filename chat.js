@@ -22,8 +22,8 @@ onAuthStateChanged(auth, async user => {
   me = mySnap.val(); peer = peerSnap.val();
   safeText(document.getElementById("peer-username"), peer.username || "User");
   safeText(document.getElementById("peer-escrown-id"), peer.escrownId || peer.escrownID || "------");
-  const chatSnap = await get(ref(db, `chats/${chatId}`));
-  if (chatSnap.exists()) startListeners();
+  await call("openChat", { peerUid });
+  startListeners();
 });
 
 document.getElementById("chat-form")?.addEventListener("submit", async e => {
@@ -91,6 +91,14 @@ function listenTransaction() {
     activeTransaction = snap.val(); const active = activeTransaction && !["COMPLETED","CANCELLED"].includes(activeTransaction.status);
     safeText(document.getElementById("active-tx-id"), active ? (activeTransaction.publicTxId || activeTransaction.txId) : "None (No active transaction)");
     safeText(document.getElementById("tx-status-badge"), active ? activeTransaction.status : "Inactive");
+    const detail = document.getElementById("tx-details");
+    if (detail) {
+      if (active && activeTransaction.amount != null) {
+        const fee = Number(activeTransaction.fee || 0);
+        const total = Number(activeTransaction.total || 0);
+        detail.textContent = `Amount: ₦${Number(activeTransaction.amount).toLocaleString()} • Fee: ₦${fee.toLocaleString()} • Total: ₦${total.toLocaleString()}`;
+      } else detail.textContent = "No active transaction.";
+    }
   });
 }
 function listenRequest() {

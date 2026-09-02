@@ -16,4 +16,10 @@ This archive fixes the frontend bugs and moves sensitive transaction actions int
 
 The Firebase web configuration is normally safe to ship in browser code; Firebase Authentication and Database Rules are the security boundaries. The previous Gemini key was removed from the frontend, but any previously exposed Gemini key should be revoked/rotated in the provider console because an exposed secret cannot be made safe retroactively.
 
-The transaction lifecycle is now: `NEGOTIATING -> AWAITING_PAYMENT -> FUNDED -> RELEASED/COMPLETED`, with `DISPUTED` and `CANCELLED` as controlled states. Payment confirmation and release must still be connected to your real payment provider/webhook before this is a production custodial escrow service.
+The transaction lifecycle is now: `NEGOTIATING -> AWAITING_PAYMENT -> FUNDED -> COMPLETED`, with `DISPUTED` and `CANCELLED` as controlled states. Both parties must submit the same amount before payment can be verified.
+
+The included admin panel now has controls for payment verification, releasing a funded transaction, and resolving a dispute. These are administrative/manual controls; they do not move real money by themselves. Payment confirmation and release must still be connected to your real payment provider/webhook before this is a production custodial escrow service.
+
+
+### Admin setup variable
+The included `scripts/set-admin.mjs` uses `ADMIN_UID`, matching `functions/.env.example`. After assigning the claim, the administrator must sign out/in (or refresh the ID token).

@@ -13,18 +13,19 @@
      <div class="textbox"><h3><span class="txt-hder">Account Verification Required</span>
         <br>
  <span class="texry">A verification link has been sent to your<span id="email-123">email address.</span> Please click the link to confirm your identity and activate your Escrown account.</span></h3></div>
-     <button type="button" id="resend" class="btn-rsnd">Resend?</button>
+     <button type="button" id="resend" class="btn-rsnd">Resend verification</button>
+     <button type="button" id="refresh-verification" class="btn">I verified my email</button>
 
 
 
-     <button id="backToSignInBtn" class="btn">Back to sign in</button>
+     <button id="backToSignInBtn" class="btn" type="button">Back to sign in</button>
     </div>
     
     
     <script>
-        function backToSignin() {
-            window.location.href = "signin.html"
-        }
+        const pendingEmail = sessionStorage.getItem("pendingEmail");
+        if (pendingEmail) document.getElementById("email-123").textContent = " " + pendingEmail + ".";
+
     </script>
     <script type="module" src="auth.js"></script>
 </body>

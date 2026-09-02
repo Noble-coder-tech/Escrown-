@@ -326,3 +326,4 @@ body {
   border: 1px dashed var(--gold);
   user-select: all; /* Allows buyer to tap/click once to highlight and copy */
 }
+.tx-details{background:var(--dark-bg);border-bottom:1px solid var(--border);padding:7px 20px;font-size:.8rem;color:var(--gray);text-align:center}
