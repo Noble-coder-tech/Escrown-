@@ -46,7 +46,7 @@ function load(){
   onValue(ref(db,"completed_ledger"), snap=>{
     const body=document.getElementById("ledger-table-body"); body.replaceChildren(); let n=0;
     snap.forEach(c=>{n++;const x=c.val()||{};addRow(body,[x.publicTxId||x.txId,x.note,x.completedAt?new Date(x.completedAt).toLocaleDateString():"--"]);});
-    if(!n) body.innerHTML='<tr><td colspan="4" class="center-text">No completed transactions logged.</td></tr>'; document.getElementById("metric-completed").textContent=n;
+    if(!n) body.innerHTML='<tr><td colspan="3" class="center-text">No completed transactions logged.</td></tr>'; document.getElementById("metric-completed").textContent=n;
   });
   onValue(ref(db,"users"), snap=>{
     const body=document.getElementById("users-table-body"); body.replaceChildren(); let n=0;

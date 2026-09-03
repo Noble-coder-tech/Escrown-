@@ -18,7 +18,8 @@
         "accountNumber": {
           ".write": "auth != null && auth.uid === $uid && newData.isString() && newData.val().matches(/^\\d{10}$/)"
         }
-      }
+      },
+      ".read": "auth != null && auth.token.admin === true"
     },
     "chats": {
       "$chatId": {

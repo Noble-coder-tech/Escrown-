@@ -9,6 +9,7 @@ setGlobalOptions({ region: "europe-west1", maxInstances: 10 });
 
 const FEE_RATE = 0.02;
 const PUBLIC_ID_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const RESERVED_USERNAMES = new Set(["admin", "support", "escrown", "system"]);
 
 function requireAuth(request) {
   if (!request.auth) throw new HttpsError("unauthenticated", "Authentication required.");
@@ -40,10 +41,11 @@ function makePublicTxId() {
   return result;
 }
 async function uniquePublicTxId() {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 20; i++) {
     const id = makePublicTxId();
-    const snap = await db.ref("publicTransactionIds").child(id).once("value");
-    if (!snap.exists()) return id;
+    const ref = db.ref(`publicTransactionIds/${id}`);
+    const result = await ref.transaction(current => current == null ? { reserved: true, createdAt: Date.now() } : undefined);
+    if (result.committed) return id;
   }
   throw new HttpsError("resource-exhausted", "Could not allocate a transaction reference.");
 }
@@ -71,6 +73,9 @@ exports.ensureUserProfile = onCall(async request => {
   const uid = requireAuth(request);
   const userRecord = await admin.auth().getUser(uid);
   const requestedUsername = String(request.data?.username || "").trim();
+  if (requestedUsername && (!/^[A-Za-z0-9_]{3,20}$/.test(requestedUsername) || RESERVED_USERNAMES.has(requestedUsername.toLowerCase()))) {
+    throw new HttpsError("invalid-argument", "Choose a valid username (3–20 letters, numbers or underscores).");
+  }
   const userRef = db.ref(`users/${uid}`);
   const existingSnap = await userRef.once("value");
 
@@ -93,10 +98,11 @@ exports.ensureUserProfile = onCall(async request => {
     return { uid, username, escrownId };
   }
 
-  const username = makeSafeUsername(
+  let username = makeSafeUsername(
     requestedUsername || userRecord.displayName || userRecord.email?.split("@")[0],
     `user${uid.slice(0, 6)}`
   );
+  if (RESERVED_USERNAMES.has(username.toLowerCase())) username = `user${uid.slice(0, 6)}`;
   const usernameKey = username.toLowerCase();
   const usernameRef = db.ref(`usernames/${usernameKey}`);
   const usernameResult = await usernameRef.transaction(current => current == null ? uid : undefined);
@@ -264,8 +270,13 @@ exports.flagTransaction = onCall(async request => {
   const peerUid = members.find(x => x !== uid); await ensureChat(chatId, uid, peerUid);
   const txSnap = await db.ref(`chats/${chatId}/transaction`).once("value"); const tx = txSnap.val();
   if (!tx || tx.txId !== txId || ["COMPLETED", "CANCELLED"].includes(tx.status)) throw new HttpsError("failed-precondition", "Transaction cannot be flagged.");
+  if (tx.status === "DISPUTED") throw new HttpsError("failed-precondition", "This transaction is already under dispute review.");
+  const previousStatus = tx.status;
   const reportRef = db.ref("flagged_transactions").push();
-  await reportRef.set({ txId: tx.txId, publicTxId: tx.publicTxId, chatId, flaggedByUid: uid, timestamp: Date.now(), status: "OPEN" });
+  await reportRef.set({
+    txId: tx.txId, publicTxId: tx.publicTxId, chatId, flaggedByUid: uid,
+    previousStatus, timestamp: Date.now(), status: "OPEN"
+  });
   await db.ref(`chats/${chatId}/transaction`).update({ status: "DISPUTED", disputedAt: Date.now() });
   await db.ref(`chats/${chatId}/messages`).push({ isSystem: true, text: `Transaction ${tx.publicTxId} has been flagged and moved to dispute review.`, timestamp: Date.now() });
   return { ok: true };
@@ -285,13 +296,15 @@ exports.resolveFlaggedTransaction = onCall(async request => {
   const tx = txSnap.val();
   if (!tx || tx.txId !== report.txId) throw new HttpsError("failed-precondition", "Transaction record mismatch.");
   if (tx.status !== "DISPUTED") throw new HttpsError("failed-precondition", "Only disputed transactions can be resolved.");
-  const nextStatus = decision === "dismiss" ? "FUNDED" : "CANCELLED";
+  const nextStatus = decision === "dismiss"
+    ? (["NEGOTIATING", "AWAITING_PAYMENT", "FUNDED"].includes(report.previousStatus) ? report.previousStatus : "FUNDED")
+    : "CANCELLED";
   await txRef.update({ status: nextStatus, disputeResolvedAt: Date.now(), disputeDecision: decision });
   await reportRef.update({ status: decision === "dismiss" ? "DISMISSED" : "REFUND_REVIEWED", resolvedAt: Date.now() });
   await db.ref(`chats/${report.chatId}/messages`).push({
     isSystem: true,
     text: decision === "dismiss"
-      ? `Administration dismissed the dispute for ${report.publicTxId}. The transaction is FUNDED again.`
+      ? `Administration dismissed the dispute for ${report.publicTxId}. The transaction is ${nextStatus}.`
       : `Administration marked ${report.publicTxId} for cancellation/refund review.`,
     timestamp: Date.now()
   });
