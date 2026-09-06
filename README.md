@@ -23,3 +23,28 @@ The included admin panel now has controls for payment verification, releasing a 
 
 ### Admin setup variable
 The included `scripts/set-admin.mjs` uses `ADMIN_UID`, matching `functions/.env.example`. After assigning the claim, the administrator must sign out/in (or refresh the ID token).
+
+## Frontend file structure
+
+The frontend is a set of static multi-page HTML files, each with its own stylesheet and script:
+
+```text
+index.html            index.css            firebase-config.js
+signin.html           style.css            auth.js
+signup.html           style.css            auth.js
+forget.html           forget.css           auth.js
+verification.html     verification.css     auth.js
+home.html             home.css             app.js
+profile.html          home.css             app.js
+chat.html             chat.css             chat.js
+terms.html            legal.css
+privacy.html          legal.css
+admin.html            admin.css            admin.js
+adminlogin.html        adminlogin.css       adminlogin.js
+config.js       — shared Firebase project config
+firebase-config.js — shared Firebase app/auth/db initialization
+functions/       — Cloud Functions backend
+scripts/         — one-off admin setup script
+```
+
+Every page already links to its matching CSS and JS files. This is a production build with no demo/testing mode: all sign-in, sign-up, chat, transaction, and admin actions call the real Firebase Authentication, Realtime Database, and Cloud Functions backend described above.
