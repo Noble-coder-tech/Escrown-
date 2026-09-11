@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Escrown | Admin Login</title><link rel="stylesheet" href="adminlogin.css"><link rel="icon" href="logo.png">
+</head>
+<body>
+  <main class="auth-container">
+    <section class="auth-card">
+      <h1>Escrown Admin</h1><p>Authorized administrators only.</p>
+      <form id="admin-login-form">
+        <label for="admin-email">Email</label><input id="admin-email" type="email" required autocomplete="username">
+        <label for="admin-password">Password</label><input id="admin-password" type="password" required autocomplete="current-password">
+        <button type="submit" class="btn-primary">Sign In</button>
+        <p id="login-error" role="alert"></p>
+      </form>
+      <a href="index.html">Return to Escrown</a>
+    </section>
+  </main>
+  <script type="module" src="adminlogin.js"></script>
+</body>
+</html>

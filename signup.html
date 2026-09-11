@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Escrown</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Create Account</h2>
+            <p class="subtitle">Start your journey with us</p>
+
+            <form id="signup-form">
+                <div class="input-group"><label>Username</label><input type="text" id="signup-username" placeholder="Choose a username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" required></div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="signup-email" placeholder="email@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="signup-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary" id="signup-btn">Sign Up</button>
+            </form>
+
+            <div class="divider"><span>or</span></div>
+
+            <button class="btn-google" id="google-signup">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Sign up with Google
+            </button>
+
+            <p class="footer-text">
+                Already have an account? <a href="signin.html">Sign In</a>
+            </p>
+            <label for="tickbox" class="checkbox-label">
+  <input type="checkbox" id="tickbox" name="tickbox" class="tickbox">
+  
+  <span class="label-text">
+    I agree to Escrowns's
+    <a href="terms.html" class="textlinked">Terms and Conditions</a> 
+    and 
+    <a href="privacy.html" class="textlinked">Privacy Policy</a>
+  </span>
+</label>
+        </div>
+    </div>
+    
+    <script type="module" src="auth.js"></script>
+    
+</body>
+</html>
