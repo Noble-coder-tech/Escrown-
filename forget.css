@@ -1,0 +1,121 @@
+/* Reset basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #1a1a1a; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px; /* Safe screen edge padding */
+}
+
+/* Auth Container Card - Expanded for maximum mobile layout presence */
+.auth-container {
+    background: gold;
+    padding: 40px 28px; /* Significantly enhanced interior spacing for a premium feel */
+    border-radius: 16px;
+    width: 100%;
+    max-width: 440px; /* Increased bounds so the card occupies a bold footprint */
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    text-align: center;
+}
+
+h2 {
+    color: #ffffff;
+    margin-bottom: 16px;
+    font-size: 28px; /* Bold, highly visible title */
+    font-weight: 600;
+}
+
+p {
+    color: #aaaaaa;
+    font-size: 15px; /* Boosted body text slightly for effortless readability */
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+/* Form Layout */
+#forgot-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Roomier inputs to prevent accidental mis-taps */
+}
+
+/* Input Styling */
+#forgot-email {
+    width: 100%;
+    padding: 16px; /* Expanded padding for a premium look */
+    background: #333333;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 16px; /* Larger font size prevents iOS Safari from auto-zooming the page */
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#forgot-email:focus {
+    border-color: black; 
+    background: #3a3a3a;
+}
+
+/* Submit & Timer Button Styling */
+#reset-btn {
+    width: 100%;
+    padding: 16px;
+    background: black; 
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, opacity 0.3s ease;
+}
+
+#reset-btn:hover {
+    background: #555;
+}
+
+/* Style when the 30s timer triggers and disables the button */
+#reset-btn:disabled {
+    background: #444444;
+    color: #888888;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Back to Sign In Link styling */
+a {
+    color: black; 
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    display: inline-block;
+    margin-top: 24px;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: black;
+}
+
+/* Seamless design scale-down for extra small phone screens */
+@media (max-width: 380px) {
+    .auth-container {
+        padding: 32px 20px;
+    }
+    h2 {
+        font-size: 24px;
+    }
+    p {
+        font-size: 14px;
+    }
+}

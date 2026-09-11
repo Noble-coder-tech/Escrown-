@@ -1,0 +1,57 @@
+# Escrown fixed build
+
+This archive fixes the frontend bugs and moves sensitive transaction actions into Firebase callable functions. It also adds Realtime Database rules, an admin custom-claim flow, a public minimal user directory, and an admin login page.
+
+## Before deployment
+
+1. Install the Firebase CLI and log in.
+2. In `functions/`, run `npm install`.
+3. Copy `functions/.env.example` to `functions/.env` and set `ADMIN_UID` to the Firebase Auth UID of the administrator.
+4. Assign the initial admin custom claim using the included `scripts/set-admin.mjs` script with a Firebase service-account credential available through `GOOGLE_APPLICATION_CREDENTIALS`, or an equivalent trusted Admin SDK environment.
+5. Deploy the Realtime Database rules and Cloud Functions.
+6. Configure your real payment processor/bank webhook in the backend before accepting real money. The frontend intentionally contains no bank account number or payment secret.
+7. Do not put Gemini/API secrets in frontend files. An AI integration should be implemented as a server-side function if you add one.
+
+## Important
+
+The Firebase web configuration is normally safe to ship in browser code; Firebase Authentication and Database Rules are the security boundaries. The previous Gemini key was removed from the frontend, but any previously exposed Gemini key should be revoked/rotated in the provider console because an exposed secret cannot be made safe retroactively.
+
+The transaction lifecycle is now: `NEGOTIATING -> AWAITING_PAYMENT -> FUNDED -> COMPLETED`, with `DISPUTED` and `CANCELLED` as controlled states. Both parties must submit the same amount before payment can be verified.
+
+The included admin panel now has controls for payment verification, releasing a funded transaction, and resolving a dispute. These are administrative/manual controls; they do not move real money by themselves. Payment confirmation and release must still be connected to your real payment provider/webhook before this is a production custodial escrow service.
+
+
+### Admin setup variable
+The included `scripts/set-admin.mjs` uses `ADMIN_UID`, matching `functions/.env.example`. After assigning the claim, the administrator must sign out/in (or refresh the ID token).
+
+## Frontend file structure
+
+The frontend is a set of static multi-page HTML files, each with its own stylesheet and script:
+
+```text
+index.html            index.css            firebase-config.js
+signin.html           style.css            auth.js
+signup.html           style.css            auth.js
+forget.html           forget.css           auth.js
+verification.html     verification.css     auth.js
+home.html             home.css             app.js
+profile.html          home.css             app.js
+chat.html             chat.css             chat.js
+terms.html            legal.css
+privacy.html          legal.css
+admin.html            admin.css            admin.js
+adminlogin.html        adminlogin.css       adminlogin.js
+config.js       — shared Firebase project config
+firebase-config.js — shared Firebase app/auth/db initialization
+functions/       — Cloud Functions backend
+scripts/         — one-off admin setup script
+```
+
+Every page already links to its matching CSS and JS files. This is a production build with no demo/testing mode: all sign-in, sign-up, chat, transaction, and admin actions call the real Firebase Authentication, Realtime Database, and Cloud Functions backend described above.
+
+
+## Diagnostics
+
+The build now includes `error-logs.html`, which shows browser-side signup/auth/dashboard/chat errors stored locally in the current browser. It supports refresh, copy, JSON export, and clearing logs. Passwords, API keys, access tokens, ID tokens, and refresh tokens are redacted before storage.
+
+The signup flow logs each stage and automatically removes a newly created Firebase Auth user when profile creation fails, preventing a failed signup from leaving an unusable half-created account. Cloud Functions also write structured `ensureUserProfile.*` events to Firebase/Cloud Functions logs, including request IDs and cleanup failures.
